@@ -5,7 +5,7 @@ const Img = use("App/Model/Img")
 class ImgController {
 
   * post (request, response) {
-    let data = request.only('title', 'url', 'count')
+    let data = request.only('title', 'url')
     let post = yield Img.create(data)
 
     response.status(201).json(post)
@@ -27,11 +27,12 @@ class ImgController {
 
   * update (request, response) {
     let imgId = request.param('id')
-    let updateCount = yield Img.findBy('id', imgId)
-    updateCount.fill(request.only('count'))
-    yield updateCount.save()
+    let image = yield Img.findBy('id', imgId)
+    image.count++
+    
+    yield image.save()
 
-    response.status(200).json(updateCount)
+    response.status(200).json(image)
   }
 
   * delete (request, response) {
